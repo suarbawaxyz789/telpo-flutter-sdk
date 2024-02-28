@@ -2,7 +2,7 @@ package me.aljan.telpo_flutter_sdk
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.telpo.tps550.api.printer.UsbThermalPrinter
+import com.common.apiutil.printer.ThermalPrinter
 
 enum class PrintType {
     Byte, Text, QR, PDF, WalkPaper,
@@ -16,16 +16,16 @@ class Utils {
     fun getAlignment(alignment: String?): Int {
         return when (alignment) {
             "left" -> {
-                UsbThermalPrinter.ALGIN_LEFT
+                ThermalPrinter.ALGIN_LEFT
             }
             "center" -> {
-                UsbThermalPrinter.ALGIN_MIDDLE
+                ThermalPrinter.ALGIN_MIDDLE
             }
             "right" -> {
-                UsbThermalPrinter.ALGIN_RIGHT
+                ThermalPrinter.ALGIN_RIGHT
             }
             else -> {
-                UsbThermalPrinter.ALGIN_LEFT
+                ThermalPrinter.ALGIN_LEFT
             }
         }
     }

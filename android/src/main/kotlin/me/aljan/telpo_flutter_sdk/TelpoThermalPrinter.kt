@@ -6,11 +6,10 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
-import com.telpo.tps550.api.printer.UsbThermalPrinter
+import com.common.apiutil.printer.ThermalPrinter
 
 class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
     private val TAG = "TelpoThermalPrinter"
-    private var mUsbThermalPrinter: UsbThermalPrinter? = null
     private var utils: Utils
     private val context: Context = activity.context
     private var errorResult: String? = null
@@ -42,7 +41,6 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
         "com.telpo.tps550.api.printer.DeviceTransmitDataException"
 
     init {
-        mUsbThermalPrinter = UsbThermalPrinter(context)
         utils = Utils()
     }
 
@@ -79,7 +77,7 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
         try {
             this.result = result
 
-            when (mUsbThermalPrinter?.checkStatus()) {
+            when (ThermalPrinter.checkStatus()) {
                 STATUS_OK -> {
                     if (lowBattery) {
                         PrintHandler().sendMessage(
@@ -121,8 +119,8 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
 
     fun connect(): Boolean {
         return try {
-            mUsbThermalPrinter?.start(0)
-            mUsbThermalPrinter?.reset()
+            ThermalPrinter.start()
+            ThermalPrinter.reset()
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -133,8 +131,8 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
 
     fun disconnect(): Boolean {
         return try {
-            mUsbThermalPrinter?.reset()
-            mUsbThermalPrinter?.stop()
+            ThermalPrinter.reset()
+            ThermalPrinter.stop()
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -168,11 +166,11 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
         override fun run() {
             super.run()
             try {
-                mUsbThermalPrinter?.reset()
-                mUsbThermalPrinter?.setAlgin(UsbThermalPrinter.ALGIN_LEFT)
-                mUsbThermalPrinter?.setLeftIndent(0)
-                mUsbThermalPrinter?.setLineSpace(0)
-                mUsbThermalPrinter?.setGray(5)
+                ThermalPrinter.reset()
+                ThermalPrinter.setAlgin(ThermalPrinter.ALGIN_LEFT)
+                ThermalPrinter.setLeftIndent(0)
+                ThermalPrinter.setLineSpace(0)
+                ThermalPrinter.setGray(5)
 
                 for (data in printDataArray) {
                     val type = utils.getPrintType(data["type"].toString())
@@ -189,7 +187,7 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
                         PrintType.WalkPaper -> {
                             val step = data["data"].toString().toIntOrNull() ?: 2
 
-                            mUsbThermalPrinter?.walkPaper(step)
+                            ThermalPrinter.walkPaper(step)
                         }
                     }
                 }
@@ -228,7 +226,7 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
                 }
                 //
                 else {
-                    mUsbThermalPrinter?.stop()
+                    ThermalPrinter.stop()
                 }
             }
         }
@@ -239,10 +237,10 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
         val alignment = utils.getAlignment(data["alignment"].toString())
         val fontSize = utils.getFontSize(data["fontSize"].toString())
 
-        mUsbThermalPrinter?.setTextSize(fontSize)
-        mUsbThermalPrinter?.setAlgin(alignment)
-        mUsbThermalPrinter?.addString(text)
-        mUsbThermalPrinter?.printString()
+        ThermalPrinter.setFontSize(fontSize)
+        ThermalPrinter.setAlgin(alignment)
+        ThermalPrinter.addString(text)
+        ThermalPrinter.printString()
 
         result?.success(true)
         return
@@ -254,10 +252,10 @@ class TelpoThermalPrinter(activity: TelpoFlutterSdkPlugin) {
         for (bitmap in value) {
             val bmp = utils.createByteImage(bitmap as ByteArray)
 
-            mUsbThermalPrinter?.printLogo(bmp, false)
+            ThermalPrinter.printLogo(bmp,)
         }
 
-        mUsbThermalPrinter?.printString()
+        ThermalPrinter.printString()
         result?.success(true)
         return
     }

@@ -47,9 +47,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.zxing:core:3.3.0'
     implementation files('src/libs/SmartCardLib.jar')
-    implementation files('src/libs/telpo_api.jar')
+    implementation files('src/libs/telpoLib_v2.5.20230417.aar')
     implementation files('src/libs/zkandroidcore.jar')
     implementation files('src/libs/zkandroidnidfpsensor.jar')
     implementation 'com.github.ChickenHook:RestrictionBypass:2.2'
