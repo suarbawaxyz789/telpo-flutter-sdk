@@ -47,10 +47,7 @@ android {
 }
 
 dependencies {
-    implementation files('src/libs/SmartCardLib.jar')
-    implementation files('src/libs/telpoLib_v2.5.20230417.aar')
-    implementation files('src/libs/zkandroidcore.jar')
-    implementation files('src/libs/zkandroidnidfpsensor.jar')
+    implementation fileTree(dir: 'src/libs', include: ['*.jar', '*.aar'])
     implementation 'com.github.ChickenHook:RestrictionBypass:2.2'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0@aar'
 }
